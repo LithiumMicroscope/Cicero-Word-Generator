@@ -11,6 +11,7 @@ namespace WordGenerator.ChannelManager
         ChannelManager cm;
         ChannelCollection selectedChannelCollection;
         HardwareChannel.HardwareConstants.ChannelTypes selectedChannelType;
+        //Units.Dimension selectedUnit;
 
         /// <summary>
         /// Constructor for the AddDevice form. The ChannelManager parameter is used so that the AddDevice form can
@@ -27,6 +28,10 @@ namespace WordGenerator.ChannelManager
             // Add entries to the deviceTypeCombo
             foreach (HardwareChannel.HardwareConstants.ChannelTypes ct in HardwareChannel.HardwareConstants.allChannelTypes)
                 this.deviceTypeCombo.Items.Add(ct);
+
+            // Add units to unitCombo
+            /*foreach (Units.Dimension ut in Units.Dimension.allDimensions)
+                this.unitCombo.Items.Add(ut);*/
         }
 
         private void refreshHardwareChanCombo()
@@ -43,6 +48,16 @@ namespace WordGenerator.ChannelManager
                 }
         }
 
+        private void refreshUnitCombo()
+        {
+            // Initialize the availableHardwareChannelCombo appropriately
+            this.availableUnitsCombo.Items.Clear();
+            //this.availableUnitCombo.Items.Add(HardwareChannel.Unassigned);
+
+            foreach (Units.Dimension ut in Units.Dimension.allDimensions)
+                this.availableUnitsCombo.Items.Add(ut);
+        }
+
         /// <summary>
         /// In the small AddDevice form, everything begins as soon as the user specifies which ChannelType is to 
         /// be modified. 
@@ -55,10 +70,14 @@ namespace WordGenerator.ChannelManager
             selectedChannelCollection = Storage.settingsData.logicalChannelManager.GetDeviceCollection(selectedChannelType);
 
             // Initialize and enable the Name, Description text entries and the HardwareChannel drop-down list
-            this.deviceNameText.Enabled = true;
-            this.deviceDescText.Enabled = true;
+            this.deviceNameText.Enabled = 
+            this.deviceDescText.Enabled = 
+            this.availableUnitsCombo.Enabled = 
+            this.deviceConversionEquation.Enabled =
+            true;
 
             refreshHardwareChanCombo();
+            refreshUnitCombo();
             this.availableHardwareChanCombo.Enabled = true;
 
             // Indicate the logical ID to be used
@@ -73,6 +92,26 @@ namespace WordGenerator.ChannelManager
             else
             {
                 checkBox1.Visible = false;
+            }
+
+            // 11/12/2009 Benno: Check whether the units need to be shown
+            //if (selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
+            //    selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.gpib)
+            if (selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.analog)
+            {
+                this.deviceConversionEquation.Visible =
+                this.lblConversion.Visible =
+                this.availableUnitsCombo.Visible =
+                this.lblUnit.Visible =
+                    true;
+            }
+            else
+            {
+                this.deviceConversionEquation.Visible =
+                this.lblConversion.Visible =
+                this.availableUnitsCombo.Visible =
+                this.lblUnit.Visible =
+                    false;
             }
 
             if (selectedChannelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
@@ -104,13 +143,21 @@ namespace WordGenerator.ChannelManager
             LogicalChannel lc = new LogicalChannel();
             lc.Name = this.deviceNameText.Text;
             lc.Description = this.deviceDescText.Text;
+
+            if (this.availableUnitsCombo.SelectedItem is Units.Dimension)
+                lc.unit = (Units.Dimension)this.availableUnitsCombo.SelectedItem;
+            else
+                lc.unit = Units.Dimension.V;
+
+            //lc.unit = this.deviceUnitText.Text;
+            lc.Conversion = this.deviceConversionEquation.Text;
             lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
             lc.TogglingChannel = togglingCheck.Checked;
 
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
-                lc.HardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
+				lc.HardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
             else
-                lc.HardwareChannel = HardwareChannel.Unassigned;
+				lc.HardwareChannel = HardwareChannel.Unassigned;
 
             // Add to the appropriate collection
             selectedChannelCollection.AddChannel(lc);

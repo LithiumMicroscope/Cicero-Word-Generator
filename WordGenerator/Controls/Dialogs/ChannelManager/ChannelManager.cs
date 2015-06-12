@@ -81,10 +81,13 @@ namespace WordGenerator.ChannelManager
         }
         private void EmitLogicalDeviceToGrid(HardwareChannel.HardwareConstants.ChannelTypes ct, int logicalID, LogicalChannel lc)
         {
+            // Set the rows shown in the grid
             string[] row = { ct.ToString(),
                              logicalID.ToString(), 
                              lc.Name,
                              lc.Description,
+                             lc.unit.ToString(),
+                             lc.Conversion,
                              lc.HardwareChannel.ToString() };
             logicalDevicesDataGridView.Rows.Add(row);
         }

@@ -43,12 +43,16 @@ namespace WordGenerator.ChannelManager
             this.refreshHardwareButton = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.togglingCheck = new System.Windows.Forms.CheckBox();
+            this.lblUnit = new System.Windows.Forms.Label();
+            this.lblConversion = new System.Windows.Forms.Label();
+            this.deviceConversionEquation = new System.Windows.Forms.TextBox();
+            this.availableUnitsCombo = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(12, 53);
+            this.lblName.Location = new System.Drawing.Point(12, 50);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(38, 13);
             this.lblName.TabIndex = 0;
@@ -57,7 +61,7 @@ namespace WordGenerator.ChannelManager
             // lblDescription
             // 
             this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(12, 78);
+            this.lblDescription.Location = new System.Drawing.Point(12, 75);
             this.lblDescription.Name = "lblDescription";
             this.lblDescription.Size = new System.Drawing.Size(63, 13);
             this.lblDescription.TabIndex = 1;
@@ -66,7 +70,7 @@ namespace WordGenerator.ChannelManager
             // lblType
             // 
             this.lblType.AutoSize = true;
-            this.lblType.Location = new System.Drawing.Point(12, 18);
+            this.lblType.Location = new System.Drawing.Point(12, 12);
             this.lblType.Name = "lblType";
             this.lblType.Size = new System.Drawing.Size(34, 13);
             this.lblType.TabIndex = 2;
@@ -75,7 +79,7 @@ namespace WordGenerator.ChannelManager
             // lblHardwareChan
             // 
             this.lblHardwareChan.AutoSize = true;
-            this.lblHardwareChan.Location = new System.Drawing.Point(12, 103);
+            this.lblHardwareChan.Location = new System.Drawing.Point(12, 100);
             this.lblHardwareChan.Name = "lblHardwareChan";
             this.lblHardwareChan.Size = new System.Drawing.Size(98, 13);
             this.lblHardwareChan.TabIndex = 3;
@@ -84,7 +88,7 @@ namespace WordGenerator.ChannelManager
             // deviceNameText
             // 
             this.deviceNameText.Enabled = false;
-            this.deviceNameText.Location = new System.Drawing.Point(120, 50);
+            this.deviceNameText.Location = new System.Drawing.Point(120, 47);
             this.deviceNameText.Name = "deviceNameText";
             this.deviceNameText.Size = new System.Drawing.Size(201, 20);
             this.deviceNameText.TabIndex = 4;
@@ -92,7 +96,7 @@ namespace WordGenerator.ChannelManager
             // deviceDescText
             // 
             this.deviceDescText.Enabled = false;
-            this.deviceDescText.Location = new System.Drawing.Point(120, 75);
+            this.deviceDescText.Location = new System.Drawing.Point(120, 72);
             this.deviceDescText.Name = "deviceDescText";
             this.deviceDescText.Size = new System.Drawing.Size(201, 20);
             this.deviceDescText.TabIndex = 5;
@@ -102,14 +106,14 @@ namespace WordGenerator.ChannelManager
             this.availableHardwareChanCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.availableHardwareChanCombo.Enabled = false;
             this.availableHardwareChanCombo.FormattingEnabled = true;
-            this.availableHardwareChanCombo.Location = new System.Drawing.Point(120, 100);
+            this.availableHardwareChanCombo.Location = new System.Drawing.Point(120, 97);
             this.availableHardwareChanCombo.Name = "availableHardwareChanCombo";
             this.availableHardwareChanCombo.Size = new System.Drawing.Size(201, 21);
             this.availableHardwareChanCombo.TabIndex = 6;
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(170, 179);
+            this.okButton.Location = new System.Drawing.Point(174, 218);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 7;
@@ -119,7 +123,7 @@ namespace WordGenerator.ChannelManager
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(246, 179);
+            this.cancelButton.Location = new System.Drawing.Point(255, 218);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 8;
@@ -130,7 +134,7 @@ namespace WordGenerator.ChannelManager
             // lblLogicalID
             // 
             this.lblLogicalID.AutoSize = true;
-            this.lblLogicalID.Location = new System.Drawing.Point(199, 18);
+            this.lblLogicalID.Location = new System.Drawing.Point(191, 12);
             this.lblLogicalID.Name = "lblLogicalID";
             this.lblLogicalID.Size = new System.Drawing.Size(58, 13);
             this.lblLogicalID.TabIndex = 9;
@@ -140,15 +144,15 @@ namespace WordGenerator.ChannelManager
             // 
             this.deviceTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deviceTypeCombo.FormattingEnabled = true;
-            this.deviceTypeCombo.Location = new System.Drawing.Point(52, 15);
+            this.deviceTypeCombo.Location = new System.Drawing.Point(52, 9);
             this.deviceTypeCombo.Name = "deviceTypeCombo";
-            this.deviceTypeCombo.Size = new System.Drawing.Size(121, 21);
+            this.deviceTypeCombo.Size = new System.Drawing.Size(120, 21);
             this.deviceTypeCombo.TabIndex = 10;
             this.deviceTypeCombo.SelectedIndexChanged += new System.EventHandler(this.deviceTypeCombo_SelectedIndexChanged);
             // 
             // logicalIDText
             // 
-            this.logicalIDText.Location = new System.Drawing.Point(261, 15);
+            this.logicalIDText.Location = new System.Drawing.Point(261, 9);
             this.logicalIDText.Name = "logicalIDText";
             this.logicalIDText.ReadOnly = true;
             this.logicalIDText.Size = new System.Drawing.Size(60, 20);
@@ -156,7 +160,7 @@ namespace WordGenerator.ChannelManager
             // 
             // refreshHardwareButton
             // 
-            this.refreshHardwareButton.Location = new System.Drawing.Point(15, 179);
+            this.refreshHardwareButton.Location = new System.Drawing.Point(12, 218);
             this.refreshHardwareButton.Name = "refreshHardwareButton";
             this.refreshHardwareButton.Size = new System.Drawing.Size(105, 23);
             this.refreshHardwareButton.TabIndex = 12;
@@ -168,7 +172,7 @@ namespace WordGenerator.ChannelManager
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox1.Location = new System.Drawing.Point(13, 126);
+            this.checkBox1.Location = new System.Drawing.Point(12, 175);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(241, 17);
             this.checkBox1.TabIndex = 13;
@@ -180,20 +184,62 @@ namespace WordGenerator.ChannelManager
             // 
             this.togglingCheck.AutoSize = true;
             this.togglingCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.togglingCheck.Location = new System.Drawing.Point(15, 149);
+            this.togglingCheck.Location = new System.Drawing.Point(12, 195);
             this.togglingCheck.Name = "togglingCheck";
             this.togglingCheck.Size = new System.Drawing.Size(297, 17);
             this.togglingCheck.TabIndex = 14;
             this.togglingCheck.Text = "Toggling channel (for use with FPGA Mistrigger detection)";
             this.togglingCheck.UseVisualStyleBackColor = true;
             this.togglingCheck.Visible = false;
-            this.togglingCheck.CheckedChanged += new System.EventHandler(this.togglingCheck_CheckedChanged);
+            // 
+            // lblUnit
+            // 
+            this.lblUnit.AutoSize = true;
+            this.lblUnit.Location = new System.Drawing.Point(12, 126);
+            this.lblUnit.Name = "lblUnit";
+            this.lblUnit.Size = new System.Drawing.Size(29, 13);
+            this.lblUnit.TabIndex = 15;
+            this.lblUnit.Text = "Unit:";
+            this.lblUnit.Visible = false;
+            // 
+            // lblConversion
+            // 
+            this.lblConversion.AutoSize = true;
+            this.lblConversion.Location = new System.Drawing.Point(12, 152);
+            this.lblConversion.Name = "lblConversion";
+            this.lblConversion.Size = new System.Drawing.Size(63, 13);
+            this.lblConversion.TabIndex = 17;
+            this.lblConversion.Text = "Conversion:";
+            this.lblConversion.Visible = false;
+            // 
+            // deviceConversionEquation
+            // 
+            this.deviceConversionEquation.Enabled = false;
+            this.deviceConversionEquation.Location = new System.Drawing.Point(120, 149);
+            this.deviceConversionEquation.Name = "deviceConversionEquation";
+            this.deviceConversionEquation.Size = new System.Drawing.Size(201, 20);
+            this.deviceConversionEquation.TabIndex = 18;
+            this.deviceConversionEquation.Visible = false;
+            // 
+            // availableUnitsCombo
+            // 
+            this.availableUnitsCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.availableUnitsCombo.Enabled = false;
+            this.availableUnitsCombo.FormattingEnabled = true;
+            this.availableUnitsCombo.Location = new System.Drawing.Point(120, 123);
+            this.availableUnitsCombo.Name = "availableUnitsCombo";
+            this.availableUnitsCombo.Size = new System.Drawing.Size(201, 21);
+            this.availableUnitsCombo.TabIndex = 19;
             // 
             // AddDevice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 233);
+            this.ClientSize = new System.Drawing.Size(342, 249);
+            this.Controls.Add(this.availableUnitsCombo);
+            this.Controls.Add(this.deviceConversionEquation);
+            this.Controls.Add(this.lblConversion);
+            this.Controls.Add(this.lblUnit);
             this.Controls.Add(this.togglingCheck);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.refreshHardwareButton);
@@ -233,5 +279,9 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.Button refreshHardwareButton;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox togglingCheck;
+        private System.Windows.Forms.Label lblUnit;
+        private System.Windows.Forms.Label lblConversion;
+        private System.Windows.Forms.TextBox deviceConversionEquation;
+        private System.Windows.Forms.ComboBox availableUnitsCombo;
     }
 }

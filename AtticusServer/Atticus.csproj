@@ -75,17 +75,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Opal Kelly\Opal Kelly 4.0.8\API-32\Csharp\libFrontPanel-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=9.1.35.159, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.Common, Version=13.0.35.190, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2012\DotNET\Assemblies\Current\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=9.3.35.219, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=x86">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.DAQmx, Version=14.1.35.15, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2012\DotNET\Assemblies\Current\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.NI4882, Version=9.0.35.157, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.NI4882, Version=13.0.35.159, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2012\DotNET\Assemblies\Current\NationalInstruments.NI4882.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.VisaNS, Version=9.0.35.156, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="NationalInstruments.VisaNS, Version=13.0.35.167, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\National Instruments\MeasurementStudioVS2012\DotNET\Assemblies\Current\NationalInstruments.VisaNS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -193,6 +197,10 @@
     <ProjectReference Include="..\DataStructures\DataStructures.csproj">
       <Project>{07B67011-62AB-43E3-80F6-E00BCBFF8558}</Project>
       <Name>DataStructures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dotmath\dotMath.csproj">
+      <Project>{b2ebede8-441a-4cc2-80ff-5f290d528919}</Project>
+      <Name>dotMath</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

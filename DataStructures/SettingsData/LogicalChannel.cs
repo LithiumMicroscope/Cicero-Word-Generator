@@ -7,6 +7,8 @@ namespace DataStructures
 {
     [Serializable, TypeConverter(typeof(ExpandableObjectConverter))]
     public class LogicalChannel
+        //benno 2009
+        //lauriane 01/03/2012
     {
         private bool enabled;
 
@@ -42,13 +44,37 @@ namespace DataStructures
             set { description = value; }
         }
 
-        private HardwareChannel hardwareChannel;
+        // 16/12/2009 Benno: @todo Change this such that all the types of the Units are used
+        // Underneath is a sample code that can be used
+        //public static Array allUnits = Enum.GetValues(typeof(Units.DimensionID));
+        /*private Array unit = Enum.GetValues(typeof(Units.DimensionID));
 
-        public HardwareChannel HardwareChannel
+        public string Unit
         {
-            get { return hardwareChannel; }
-            set { hardwareChannel = value; }
+            get { return unit; }
+            set { unit = value; }
+        }*/
+        public Units.Dimension unit;
+        /*public Units.Dimension Unit
+        {
+            get { return unit; }
+            set
+            {
+                if (typeof(value) == string) {
+
+                }
+            }
+        }*/
+
+        private string conversion;
+
+        public string Conversion
+        {
+            get { return conversion; }
+            set { conversion = value; }
         }
+
+        public HardwareChannel HardwareChannel;
 
         /// <summary>
         /// True if this channel will actually be a toggling channel... ie when the buffer is generated, it will oscillate between 0 and 1.
@@ -65,7 +91,9 @@ namespace DataStructures
         {
             name = "";
             description = "";
-            hardwareChannel = HardwareChannel.Unassigned;
+            unit = Units.Dimension.V;
+            conversion = "V";
+            HardwareChannel = HardwareChannel.Unassigned;
             enabled = true;
             overridden = false;
             digitalOverrideValue = false;
@@ -85,6 +113,7 @@ namespace DataStructures
             set { analogChannelOutputNowUsesDwellWord = value; }
         }
 
+        //to the end: add 01/03/2012 lauriane
         private bool doOverrideDigitalColor;
 
         public bool DoOverrideDigitalColor

@@ -7,7 +7,9 @@ namespace DataStructures
 {
     /// <summary>
     /// This class represents the units applied to a number. It keeps track of both the dimension (ie unity, s, volts, Hz) and a
-    /// multiplier (ie M, u, k, etc).
+	/// multiplier (ie M, u, k, etc).
+	/// 11/12/2009 Benno: Added dBm, %
+	/// 12.06.2015 Benno: Added Er
     /// </summary>
     [Serializable, TypeConverter(typeof(ExpandableStructConverter))]
 	public struct Units
@@ -45,21 +47,24 @@ namespace DataStructures
                 }
             }
 
-            private enum DimensionID { unity, s, V, Hz, A, Degrees };
+			private enum DimensionID { unity, s, V, Hz, A, Degrees, dBm, Pr, Er }; // 11/12/2009 Benno: Added dBm | 18/01/2010 Added Pr (%) | 12.06.2015 Added Er
 			private DimensionID myDimensionID;
 
 			private static readonly string[] DimensionString = {
-				"", "s", "V", "Hz", "A", "deg"};
+				"", "s", "V", "Hz", "A", "deg", "dBm", "Pr", "Er"};// 11/12/2009 Benno: Added dBm | 18/01/2010 Added Pr (%) | 12.06.2015 Added Er
 
             private static readonly string[] DimensionFullName = {
-                "dimensionless", "seconds", "volts", "hertz", "amps", "degrees"};
+                "dimensionless", "seconds", "volts", "hertz", "amps", "degrees", "dBm", "percentage", "Er"}; // 11/12/2010 Benno: Added dBm | 18/01/2009 Added Pr (%) | 18/01/2009 Added Er
 
 			public static readonly Dimension unity = new Dimension(DimensionID.unity);
 			public static readonly Dimension s = new Dimension(DimensionID.s);
 			public static readonly Dimension V = new Dimension(DimensionID.V);
 			public static readonly Dimension Hz = new Dimension(DimensionID.Hz);
             public static readonly Dimension A = new Dimension(DimensionID.A);
-            public static readonly Dimension Degrees = new Dimension(DimensionID.Degrees);
+			public static readonly Dimension Degrees = new Dimension(DimensionID.Degrees);
+			public static readonly Dimension dBm = new Dimension(DimensionID.dBm); // 11/12/2009 Benno: Added dBm
+			public static readonly Dimension Pr = new Dimension(DimensionID.Pr); // 18/01/2010 Added Pr (%)
+			public static readonly Dimension Er = new Dimension(DimensionID.Er); // 18/01/2010 Added Pr (%)
 
             /// <summary>
             /// This property gives a list of commonly used multipliers for this dimension type.
@@ -88,10 +93,13 @@ namespace DataStructures
                 new Multiplier[] {Multiplier.u, Multiplier.m, Multiplier.unity, Multiplier.k}, // V
                 new Multiplier[] {Multiplier.unity, Multiplier.k, Multiplier.M, Multiplier.G}, //Hz
                 new Multiplier [] {Multiplier.u, Multiplier.m, Multiplier.unity, Multiplier.k}, // A
-                new Multiplier [] {Multiplier.unity} // deg
+                new Multiplier [] {Multiplier.unity}, // deg
+                new Multiplier [] {Multiplier.unity}, // dBm // 11/12/2009 Benno
+                new Multiplier [] {Multiplier.unity}, // Pr(%) // 18/14/2010 Benno
+                new Multiplier [] {Multiplier.unity} // Er // 12/06/2010 Benno
             };
 
-            public static readonly Dimension[] allDimensions = {unity, s, V, Hz, A, Degrees};
+			public static readonly Dimension[] allDimensions = { unity, s, V, Hz, A, Degrees, dBm, Pr, Er }; // 11/12/2009 Benno: Added dBm | 18/01/2010 Added Pr (%)
 
 	        public override string  ToString()
             {
@@ -232,6 +240,9 @@ namespace DataStructures
         public static readonly Units Hz = new Units(Dimension.Hz, Multiplier.unity);
         public static readonly Units s = new Units(Dimension.s, Multiplier.unity);
         public static readonly Units A = new Units(Dimension.A, Multiplier.unity);
-        public static readonly Units deg = new Units(Dimension.Degrees, Multiplier.unity);
+		public static readonly Units deg = new Units(Dimension.Degrees, Multiplier.unity);
+		public static readonly Units dBm = new Units(Dimension.dBm, Multiplier.unity); // 11/12/2009 Benno
+		public static readonly Units Pr = new Units(Dimension.Pr, Multiplier.unity); // 18/14/2009 Benno
+		public static readonly Units Er = new Units(Dimension.Er, Multiplier.unity); // 18/14/2009 Benno
 	}
 }

@@ -22,11 +22,20 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeText.Text = sd.channelTypeString;
             this.deviceNameText.Text = sd.lc.Name;
             this.deviceDescText.Text = sd.lc.Description;
+            // 14/12/2009 Benno: Unit conversion system
+            this.deviceConversionEquation.Text = sd.lc.Conversion;
+            //this.deviceUnitText.Text = sd.lc.Unit;
+
+            this.availableUnitsCombo.Items.Clear();
+            // Fill the availableUnitCombo with relevant items
+            foreach (Units.Dimension ut in Units.Dimension.allDimensions)
+                this.availableUnitsCombo.Items.Add(ut);
+            this.availableUnitsCombo.SelectedItem = sd.lc.unit;
 
             this.availableHardwareChanCombo.Items.Clear();
             this.availableHardwareChanCombo.Items.Add(HardwareChannel.Unassigned);
-            if (sd.lc.HardwareChannel!=null) 
-                this.availableHardwareChanCombo.Items.Add(sd.lc.HardwareChannel);
+            if (sd.lc.HardwareChannel!=null)
+				this.availableHardwareChanCombo.Items.Add(sd.lc.HardwareChannel);
             
             // Fill the availableHardwareChanCombo with relevant items
             foreach (HardwareChannel hc in cm.knownHardwareChannels)
@@ -34,7 +43,7 @@ namespace WordGenerator.ChannelManager
                     if (!Storage.settingsData.logicalChannelManager.AssignedHardwareChannels.Contains(hc))
                         this.availableHardwareChanCombo.Items.Add(hc);
 
-            this.availableHardwareChanCombo.SelectedItem = sd.lc.HardwareChannel;
+			this.availableHardwareChanCombo.SelectedItem = sd.lc.HardwareChannel;
 
             togglingCheck.Checked = sd.lc.TogglingChannel;
 
@@ -45,6 +54,26 @@ namespace WordGenerator.ChannelManager
             else
             {
                 checkBox1.Visible = false;
+            }
+
+            // 11/12/2009 Benno: Check whether the units need to be shown
+            //if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
+            //    sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.gpib)
+            if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog)
+            {
+                this.deviceConversionEquation.Visible =
+                this.lblConversion.Visible =
+                this.availableUnitsCombo.Visible =
+                this.lblUnit.Visible =
+                    true;
+            }
+            else
+            {
+                this.deviceConversionEquation.Visible =
+                this.lblConversion.Visible =
+                this.availableUnitsCombo.Visible =
+                this.lblUnit.Visible =
+                    false;
             }
 
             if (sd.channelType == HardwareChannel.HardwareConstants.ChannelTypes.analog ||
@@ -65,12 +94,21 @@ namespace WordGenerator.ChannelManager
         {
             sd.lc.Name = this.deviceNameText.Text;
             sd.lc.Description = this.deviceDescText.Text;
+
+            //sd.lc.unit = this.availableUnitsCombo.SelectedValue;
+            if (this.availableUnitsCombo.SelectedItem is Units.Dimension)
+                sd.lc.unit = (Units.Dimension)this.availableUnitsCombo.SelectedItem;
+            else
+                sd.lc.unit = Units.Dimension.V;
+
+
+            sd.lc.Conversion = this.deviceConversionEquation.Text;
             sd.lc.AnalogChannelOutputNowUsesDwellWord = checkBox1.Checked;
             
             if (this.availableHardwareChanCombo.SelectedItem is HardwareChannel)
-                sd.lc.HardwareChannel = (HardwareChannel) this.availableHardwareChanCombo.SelectedItem;
+				sd.lc.HardwareChannel = (HardwareChannel)this.availableHardwareChanCombo.SelectedItem;
             else
-                sd.lc.HardwareChannel = HardwareChannel.Unassigned;
+				sd.lc.HardwareChannel = HardwareChannel.Unassigned;
 
             // Visual feedback
             cm.RefreshLogicalDeviceDataGrid();

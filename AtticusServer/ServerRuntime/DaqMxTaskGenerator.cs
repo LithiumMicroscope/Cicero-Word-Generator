@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NationalInstruments.DAQmx;
 using DataStructures;
+using dotMath;
 
 namespace AtticusServer
 {
@@ -373,10 +374,30 @@ namespace AtticusServer
                 foreach (int analogID in analogIDs)
                 {
                     double val;
-                    if (output.analogValues.ContainsKey(analogID))
+                    // 15/12/2009 Benno: interpret the equation for each Logical device
+                    // Interpret the conversion equation
+                    string conversion = settings.logicalChannelManager.Analogs[analogID].Conversion;
+                    Units.Dimension unit = settings.logicalChannelManager.Analogs[analogID].unit;
+                    if (conversion != "" && conversion != null)
+                    {
+                        dotMath.EqCompiler eq = getConversionEq(conversion, unit);
+                        if (output.analogValues.ContainsKey(analogID))
+                            val = convertDimensions(output.analogValues[analogID], eq, unit);
+                        else
+                            // @todo discuss whether this should be totally 0 or converted from 0
+                            val = convertDimensions(0, eq, unit);
+                    }
+                    else
+                    {
+                        if (output.analogValues.ContainsKey(analogID))
+                            val = output.analogValues[analogID];
+                        else
+                            val = 0;
+                    }
+                    /*if (output.analogValues.ContainsKey(analogID))
                         val = output.analogValues[analogID];
                     else
-                        val = 0;
+                        val = 0;*/
                     outputValues.Add(val);
                 }
 
@@ -542,7 +563,41 @@ namespace AtticusServer
                         {
                             sequence.computeAnalogBuffer(analogIDs[i], timeStepSize, singleChannelBuffer);
                         }
+                        // 15/12/2009 Benno: @todo convert buffer values
+                        // Need a function that converts all the buffer values with the conversion factors given by the channelManager
 
+                        // 15/12/2009 Benno: interpret the equation for each Logical device
+                        // Interpret the conversion equation
+                        string conversion = settings.logicalChannelManager.Analogs[analogID].Conversion;
+                        Units.Dimension unit = settings.logicalChannelManager.Analogs[analogID].unit;
+                        if (conversion != null && conversion != "")
+                        {
+                            dotMath.EqCompiler eq = getConversionEq(conversion, unit);
+                            // Set the buffer values
+                            // 15/12/2009 Benno: @todo convert the buffer values
+                            for (int j = 0; j < nBaseSamples; j++)
+                            {
+                                // Add to the buffer array and convert dimensions
+                                analogBuffer[i, j] = convertDimensions(singleChannelBuffer[j], eq, unit);
+                            }
+                        }
+                        else
+                        {
+                            // No conversion use the old technique
+                            // Set the buffer values
+                            for (int j = 0; j < nBaseSamples; j++)
+                            {
+                                // Add to the buffer array and convert dimensions
+                                analogBuffer[i, j] = singleChannelBuffer[j];
+                            }
+                        }
+                        // Filling up the rest of the time
+                        for (int j = nBaseSamples; j < nSamples; j++)
+                        {
+                            analogBuffer[i, j] = analogBuffer[i, j - 1];
+                        }
+
+                        /*// 21/12/2009 Benno: improved for conversion
                         for (int j = 0; j < nBaseSamples; j++)
                         {
                             analogBuffer[i, j] = singleChannelBuffer[j];
@@ -550,7 +605,7 @@ namespace AtticusServer
                         for (int j = nBaseSamples; j < nSamples; j++)
                         {
                             analogBuffer[i, j] = analogBuffer[i, j - 1];
-                        }
+                        }*/
                     }
 
                     singleChannelBuffer = null;
@@ -703,6 +758,43 @@ namespace AtticusServer
                         {
                             sequence.computeAnalogBuffer(analogIDs[i], timeStepSize, singleChannelBuffer, timebaseSegments);
                         }
+
+                        // 15/12/2009 Benno: @todo convert buffer values
+                        // Need a function that converts all the buffer values with the conversion factors given by the channelManager
+
+                        // 15/12/2009 Benno: interpret the equation for each Logical device
+                        // Interpret the conversion equation
+                        string conversion = settings.logicalChannelManager.Analogs[analogID].Conversion;
+                        Units.Dimension unit = settings.logicalChannelManager.Analogs[analogID].unit;
+                        if (conversion != null && conversion != "")
+                        {
+                            dotMath.EqCompiler eq = getConversionEq(conversion, unit);
+                            // Set the buffer values
+                            // 15/12/2009 Benno: @todo convert the buffer values
+                            for (int j = 0; j < nBaseSamples; j++)
+                            {
+                                // Add to the buffer array and convert dimensions
+                                analogBuffer[i, j] = convertDimensions(singleChannelBuffer[j], eq, unit);
+                                //testConv += analogBuffer[i, j].ToString() + " ";
+                            }
+                        }
+                        else
+                        {
+                            // No conversion use the old technique
+                            // Set the buffer values
+                            for (int j = 0; j < nBaseSamples; j++)
+                            {
+                                // Add to the buffer array and convert dimensions
+                                analogBuffer[i, j] = singleChannelBuffer[j];
+                            }
+                        }
+                        // Filling up the rest of the time
+                        for (int j = nBaseSamples; j < nSamples; j++)
+                        {
+                            analogBuffer[i, j] = analogBuffer[i, j - 1];
+                        }
+
+                        /*// 21/12/2009 Benno: improved for conversion
                         for (int j = 0; j < nBaseSamples; j++)
                         {
                             analogBuffer[i, j] = singleChannelBuffer[j];
@@ -710,7 +802,7 @@ namespace AtticusServer
                         for (int j = nBaseSamples; j < nSamples; j++)
                         {
                             analogBuffer[i, j] = analogBuffer[i, j - 1];
-                        }
+                        }*/
                     }
 
                     singleChannelBuffer = null;
@@ -966,7 +1058,7 @@ namespace AtticusServer
         }
 
         /// <summary>
-        /// Ids will receive the sorted keys of dict. hc will receive the corresponding hardwareChannels.
+        /// Ids will receive the sorted keys of dict. hc will receive the corresponding HardwareChannels.
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="?"></param>
@@ -1017,8 +1109,83 @@ namespace AtticusServer
             for (int i = 0; i < buffer.Length; i += 2)
             {
                 buffer[i] = 5;
-                buffer[i+1]=0;
+                buffer[i + 1] = 0;
             }
+        }
+
+        /// 15/12/2009 Benno
+        /// <summary>
+        /// Takes a value created for the buffer and converts this using the unit/conversion settings of
+        /// the given LogicalChannel. The function returns again a double value which converted the
+        /// UI unit to volts
+        /// </summary>
+        /// <param name="bufferValue"></param>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public static double convertDimensions(double bufferValue, dotMath.EqCompiler eq, Units.Dimension unit)
+        {
+            double convertedValue = 0;
+            // Give the value of the variable
+            eq.SetVariable(unit.ToString(), bufferValue);
+
+            try
+            {
+                double val = eq.Calculate();
+                if ((!double.IsInfinity(val)) && (!double.IsNaN(val)))
+                {
+                    convertedValue = eq.Calculate();
+                }
+            }
+            catch (Exception)
+            {
+                // @todo error message
+                //throw new Exception ("ERROR!!!");
+            }
+
+            return convertedValue;
+        }
+
+        // 21/12/2009 Benno: Added to get the conversion tool
+        public static dotMath.EqCompiler getConversionEq(string conversion, Units.Dimension unit)
+        {
+            // There is a conversion
+            dotMath.EqCompiler eq = new dotMath.EqCompiler(conversion, true);
+            bool error = false;
+
+            // Try executing the equation
+            try
+            {
+                eq.Compile();
+            }
+            catch (Exception)
+            {
+                // @todo Put a nice error message
+                error = true;
+            }
+
+            string[] foundVars = eq.GetVariableList();
+            if (foundVars != null)
+            {
+                // There should only be one variable: the UI Unit, so check that
+                if (foundVars.Length != 1 || foundVars[0] != unit.ToString())
+                {
+                    // @todo Error message
+                    error = true;
+                }
+            }
+            else
+            {
+                // @todo Error message for missing the UI variable
+                error = true;
+            }
+
+            //string convTest = "";
+            if (error)
+            {
+                throw new Exception("Conversion equation is not well formilized.");
+            }
+
+            return eq;
         }
     }
 }

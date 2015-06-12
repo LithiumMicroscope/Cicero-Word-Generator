@@ -33,7 +33,9 @@ namespace WordGenerator.ChannelManager
             this.deviceTypeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deviceIDColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deviceNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deviceDescColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.deviceDescColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.deviceUnitColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.deviceConversionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deviceHardwareChanColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deleteDeviceButton = new System.Windows.Forms.Button();
             this.editDeviceButton = new System.Windows.Forms.Button();
@@ -81,6 +83,8 @@ namespace WordGenerator.ChannelManager
             this.deviceIDColumn,
             this.deviceNameColumn,
             this.deviceDescColumn,
+            this.deviceUnitColumn,
+            this.deviceConversionColumn,
             this.deviceHardwareChanColumn});
             this.logicalDevicesDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logicalDevicesDataGridView.GridColor = System.Drawing.Color.Black;
@@ -124,6 +128,20 @@ namespace WordGenerator.ChannelManager
             this.deviceDescColumn.HeaderText = "Description";
             this.deviceDescColumn.Name = "deviceDescColumn";
             this.deviceDescColumn.ReadOnly = true;
+            // 
+            // deviceUnitColumn
+            // 
+            this.deviceUnitColumn.FillWeight = 30F;
+            this.deviceUnitColumn.HeaderText = "Unit";
+            this.deviceUnitColumn.Name = "deviceUnitColumn";
+            this.deviceUnitColumn.ReadOnly = true;
+            this.deviceUnitColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // deviceConversionColumn
+            // 
+            this.deviceConversionColumn.HeaderText = "Conversion";
+            this.deviceConversionColumn.Name = "deviceConversionColumn";
+            this.deviceConversionColumn.ReadOnly = true;
             // 
             // deviceHardwareChanColumn
             // 
@@ -208,6 +226,8 @@ namespace WordGenerator.ChannelManager
         private System.Windows.Forms.DataGridViewTextBoxColumn deviceIDColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn deviceNameColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn deviceDescColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceUnitColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deviceConversionColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn deviceHardwareChanColumn;
         private System.Windows.Forms.Button deleteDeviceButton;
         private System.Windows.Forms.Button editDeviceButton;
